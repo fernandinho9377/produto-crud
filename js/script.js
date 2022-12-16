@@ -1,15 +1,17 @@
-// request via JavaScript ajax 4 passos
-// 01 criar a váriavel
-xhttp = new XMLHttpRequest();
+//request via JavaScript ajax 4 passos
+//01 criar a variável
+
+var api = "https://qua-209050.herokuapp.com/api/produto/";
 var lista;
-var api = "https://fernando937devjava.herokuapp.com/api/usuario/";
+
+xhttp = new XMLHttpRequest();
 
 function listar() {
-    // 02 definição do nosso request (forma e endereço)
+    // 02 definição do request(forma e endereço)
     xhttp.open("GET", api);
     // 03 manda de fato a request
     xhttp.send();
-    // 04 execução quando tiver a devolutiva do request
+    // 04 execução quando tivera devolutiva do request(response)
     xhttp.onload = function () {
         lista = this.responseText;
         // console.log(lista);
@@ -17,8 +19,8 @@ function listar() {
         // console.log(lista);
         texto = "";
         i = 0;
-        for (const u of lista) {
-            texto += `<tr onclick='editar(${i})'><td>${u.nome}</td><td>${u.email}</td></tr>`;
+        for (const u of lista){
+            texto += `<tr onclick='editar(${i})'><td>${u.nome}</td><td>R$ ${u.valor.toFixed(2)}</td></tr>`;
             i++;
         }
         document.getElementById('lista').innerHTML = texto;
@@ -28,38 +30,46 @@ function listar() {
 function editar(i) {
     u = lista[i];
     document.getElementById("nome").value = u.nome;
-    document.getElementById("Quantidade").value = u.email;
+    document.getElementById("descricao").value = u.descricao;
+    document.getElementById("valor").value = u.valor;
+    document.getElementById("img").value = u.valor;
     document.getElementById("id").value = u.id;
 }
 
 function gravar() {
-    //alert("Estamos dentro da function incluir");
-    var usuario = {};
-    usuario.nome = document.getElementById("nome").value;
-    usuario.email = document.getElementById("Quantidade").value;
-    // console.log(usuario);
+    //alert("Estamos dentro da função incluir");
+    var item = {};
+    item.nome = document.getElementById("nome").value;
+    item.descricao = document.getElementById("descricao").value;
+    item.valor = document.getElementById("valor").value;
+    item.img = document.getElementById("img").value;
+    //console.log(item);
 
-    usuario.id = document.getElementById("id").value;
-    if (usuario.id > 0) {
-        acao = "PUT"; // alteração
+    item.id = document.getElementById("Id").value;
+    if (item.id > 0){
+        acao = "PUT"; //alteração
     } else {
-        acao = "POST"; // incluir
+        acao = "POST"; //incluir
     }
+    
 
     xhttp.open(acao, api);
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhttp.send(JSON.stringify(usuario));
+    xhttp.send(JSON.stringify(item));
     xhttp.onload = function () {
         // console.log(this.responseText);
         listar();
         limpar();
     }
+
 }
 
 function limpar() {
-    document.getElementById("nome").value = "";
-    document.getElementById("Quantidade").value = "";
-    document.getElementById("id").value = "";
+    document.querySelector("nome").value = "";
+    document.querySelector("descricao").value = "";
+    document.querySelector("valor").value = "";
+    document.querySelector("img").value = "";
+    document.querySelector("id").value = "";
 }
 
 function apagar() {
